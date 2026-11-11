@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+
+{% block extra_style %}
+<style>
+    .toggle-container {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .toggle-btn {
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.6rem 1.5rem;
+        border-radius: 12px;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .toggle-btn.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .dashboard-section {
+        display: none;
+    }
+
+    .dashboard-section.active {
+        display: block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    th,
+    td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    .stat-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        padding: 1.5rem;
+        background: rgba(15, 23, 42, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        text-align: center;
+    }
+
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--secondary);
+    }
+
+    .plot-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    .plot-item img {
+        width: 100%;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <h2 style="margin-bottom: 2rem; text-align: center;">System Dashboard</h2>
+
+    <div class="toggle-container">
+        <div class="toggle-btn active" onclick="showSection('graphs')">Accuracy Graphs</div>
+        <div class="toggle-btn" onclick="showSection('dataset')">Dataset Details</div>
+    </div>
+
+    <!-- Graphs Section -->
+    <div id="graphs" class="dashboard-section active">
+        <div class="plot-container">
+            <div class="plot-item">
+                <h3 style="margin-bottom: 1rem; color: var(--text-muted);">Performance Metrics</h3>
+                <img src="/static/accuracy_graph.png" alt="Accuracy Graph">
+            </div>
+            <div class="plot-item">
+                <h3 style="margin-bottom: 1rem; color: var(--text-muted);">Confusion Matrix</h3>
+                <img src="/static/confusion_matrix.png" alt="Confusion Matrix">
+            </div>
+        </div>
+    </div>
+
+    <!-- Dataset Section -->
+    <div id="dataset" class="dashboard-section">
+        <div class="stat-grid">
+            <div class="stat-card">
+                <p style="color: var(--text-muted);">Total Samples</p>
+                <div class="stat-value">{{ data_info.total_samples }}</div>
+            </div>
+            {% for label, count in data_info.counts.items() %}
+            <div class="stat-card">
+                <p style="color: var(--text-muted);">{{ label }} Samples</p>
+                <div class="stat-value">{{ count }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h3 style="margin-bottom: 1rem; color: var(--text-muted);">Dataset Preview (First 10 rows)</h3>
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        {% for col in data_info.cols %}
+                        <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data_info.head %}
+                    <tr>
+                        {% for col in data_info.cols %}
+                        <td>{{ row[col] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--text-muted);">Requirements (Exact Versions)</h3>
+        <div class="stat-card" style="text-align: left; font-family: monospace; white-space: pre;">
+            flask==2.2.2
+            pandas==1.5.3
+            numpy==1.23.5
+            scikit-learn==1.2.2
+            matplotlib==3.7.1
+            seaborn==0.12.2
+            joblib==1.2.0
+        </div>
+    </div>
+</div>
+
+<script>
+    function showSection(sectionId) {
+        // Toggle active class on sections
+        document.querySelectorAll('.dashboard-section').forEach(s => s.classList.remove('active'));
+        document.getElementById(sectionId).classList.add('active');
+
+        // Toggle active class on buttons
+        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+</script>
+{% endblock %}

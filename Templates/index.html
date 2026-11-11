@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 0;">
+    <h1
+        style="font-size: 4rem; margin-bottom: 1rem; background: linear-gradient(to right, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Predict Food Texture <br> with AI Precision
+    </h1>
+    <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 700px; margin: 0 auto 3rem;">
+        Using Gaussian Process Regression to classify food texture into Good, Bad, and Worst based on force, vibration,
+        sound, and moisture data.
+    </p>
+    <div style="display: flex; gap: 1.5rem; justify-content: center;">
+        <a href="/predict" class="btn btn-primary">Start Prediction</a>
+        <a href="/dashboard" class="btn" style="border: 1px solid rgba(255,255,255,0.2);">View Dashboard</a>
+    </div>
+</div>
+
+<div class="glass-card" style="margin-top: 2rem;">
+    <h2 style="margin-bottom: 2rem; color: var(--secondary);">How it works</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        <div>
+            <h3 style="margin-bottom: 1rem; color: var(--primary);">Data Collection</h3>
+            <p style="color: var(--text-muted);">We collect Force, Vibration, Sound Pressure, and Moisture Rate to
+                understand the physical properties of the food.</p>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 1rem; color: var(--primary);">GPR Analysis</h3>
+            <p style="color: var(--text-muted);">Our Gaussian Process Regression model analyzes non-linear relationships
+                with high confidence and accuracy.</p>
+        </div>
+        <div>
+            <h3 style="margin-bottom: 1rem; color: var(--primary);">Instant Result</h3>
+            <p style="color: var(--text-muted);">Get immediate classification results to maintain the highest food
+                quality standards in your production line.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
